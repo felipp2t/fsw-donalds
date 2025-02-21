@@ -29,7 +29,25 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const toggleCart = () => setIsOpen(!isOpen);
 
   const addProduct = (product: CartProduct) => {
-    setProducts((prev) => [...prev, product]);
+    const productIsAlreadyOnTheCart = products.some(
+      (prev) => prev.id === product.id,
+    );
+
+    if (!productIsAlreadyOnTheCart) {
+      return setProducts((prev) => [...prev, product]);
+    }
+
+    setProducts((prev) => {
+      return prev.map((prevProduct) => {
+        if (prevProduct.id === product.id) {
+          return {
+            ...prevProduct,
+            quantity: prevProduct.quantity + product.quantity,
+          };
+        }
+        return prevProduct;
+      });
+    });
   };
 
   return (
