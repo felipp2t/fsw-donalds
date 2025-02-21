@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import type { MenuCategory, Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { ClockIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { Products } from "./products";
 
 interface RestaurantCategoriesProps {
   restaurant: Prisma.RestaurantGetPayload<{
@@ -28,9 +29,8 @@ type MenuCategoryWithProducts = Prisma.MenuCategoryGetPayload<{
 export const RestaurantCategories = ({
   restaurant,
 }: RestaurantCategoriesProps) => {
-  const [selectedCategory, setSelectedCategory] = useState<MenuCategoryWithProducts>(
-    restaurant.menuCategories[0],
-  );
+  const [selectedCategory, setSelectedCategory] =
+    useState<MenuCategoryWithProducts>(restaurant.menuCategories[0]);
 
   const handleCategoryClick = (category: MenuCategoryWithProducts) =>
     setSelectedCategory(category);
@@ -76,6 +76,8 @@ export const RestaurantCategories = ({
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
+
+      <Products products={selectedCategory.products} />
     </div>
   );
 };
