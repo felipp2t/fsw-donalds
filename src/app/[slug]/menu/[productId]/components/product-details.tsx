@@ -24,15 +24,14 @@ interface ProductDetailsProps {
 export const ProductDetails = ({ product }: ProductDetailsProps) => {
   const [quantity, setQuantity] = useState<number>(1);
 
-  const handleDecreaseQuantity = () =>
-    setQuantity((prev) => (prev === 1 ? 1 : prev - 1));
+  const handleDecreaseQuantity = () => setQuantity((prev) => prev - 1);
 
   const handleIncreaseQuantity = () => setQuantity((prev) => prev + 1);
 
   return (
     <div className="relative z-50 mt-[-1.5rem] flex flex-auto flex-col overflow-hidden rounded-t-3xl p-5">
       <div className="flex-auto overflow-hidden">
-        <div className="flex items-center gap-1.5">
+        <div className="mt-5 flex items-center gap-1.5">
           <Image
             src={product.restaurant.avatarImageUrl}
             alt={product.restaurant.name}
@@ -56,6 +55,7 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
               variant="outline"
               className="size-8 rounded-xl"
               onClick={handleDecreaseQuantity}
+              disabled={quantity === 1}
             >
               <ChevronLeftIcon />
             </Button>
@@ -71,14 +71,14 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
         </div>
 
         <ScrollArea className="h-full">
-          <div className="className=" mt-6 space-y-3>
+          <div className="mt-6 space-y-3">
             <h4 className="font-semibold">Sobre</h4>
             <p className="text-sm text-muted-foreground">
               {product.description}
             </p>
           </div>
 
-          <div className="className=" mt-6 space-y-3>
+          <div className="mt-6 space-y-3">
             <div className="flex items-center gap-1.5">
               <ChefHatIcon size={18} />
               <h4 className="font-semibold">Ingredientes</h4>
