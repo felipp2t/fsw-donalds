@@ -4,15 +4,23 @@ import { ProductHeader } from "./components/header";
 import { ProductDetails } from "./components/product-details";
 
 interface ProductPageProps {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ slug: string; productId: string }>;
 }
 
 export default async function ProductPage(props: ProductPageProps) {
   const { productId } = await props.params;
+  const { slug } = await props.params;
 
   const { product } = await getProductWithRestaurantById(productId);
 
   if (!product) {
+    return notFound();
+  }
+
+  const isProductFromRestaurant =
+    product.restaurant.slug.toUpperCase() === slug.toUpperCase();
+
+  if (!isProductFromRestaurant) {
     return notFound();
   }
 
