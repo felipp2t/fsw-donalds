@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface RestaurantHeaderProps {
-  restaurant: Pick<Restaurant, "avatarImageUrl" | "name">;
+  restaurant: Pick<Restaurant, "coverImageUrl" | "name">;
 }
 
 export const RestaurantHeader = ({ restaurant }: RestaurantHeaderProps) => {
@@ -26,7 +26,7 @@ export const RestaurantHeader = ({ restaurant }: RestaurantHeaderProps) => {
         <ChevronLeftIcon />
       </Button>
       <Image
-        src={restaurant.avatarImageUrl}
+        src={restaurant.coverImageUrl}
         alt={restaurant.name}
         fill
         className="object-cover"
