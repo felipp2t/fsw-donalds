@@ -1,23 +1,25 @@
-import { getProductById } from "@/data/get-product-by-id";
+import { getProductWithRestaurantById } from "@/data/get-product-by-id";
 import { notFound } from "next/navigation";
 import { ProductHeader } from "./components/header";
+import { ProductDetails } from "./components/product-details";
 
 interface ProductPageProps {
-  params: Promise<{ slug: string; productId: string }>;
+  params: Promise<{ productId: string }>;
 }
 
 export default async function ProductPage(props: ProductPageProps) {
-  const { slug, productId } = await props.params;
+  const { productId } = await props.params;
 
-  const { product } = await getProductById(productId);
+  const { product } = await getProductWithRestaurantById(productId);
 
   if (!product) {
     return notFound();
   }
 
   return (
-    <>
+    <div className="flex h-full flex-col">
       <ProductHeader product={product} />
-    </>
+      <ProductDetails product={product} />
+    </div>
   );
 }
