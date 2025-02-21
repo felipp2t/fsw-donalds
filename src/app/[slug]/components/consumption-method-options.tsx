@@ -31,12 +31,11 @@ export const ConsumptionMethodOption = ({
           />
         </div>
         <Button variant="secondary" className="rounded-full" asChild>
-          <Link href={`/slug/meun?consumptionMethod=${option}`}>
+          <Link href={`/slug/menu?consumptionMethod=${option}`}>
             {buttonText}
           </Link>
         </Button>
       </CardContent>
-      <Button variant="secondary">Para comer aqui</Button>
     </Card>
   );
 };
