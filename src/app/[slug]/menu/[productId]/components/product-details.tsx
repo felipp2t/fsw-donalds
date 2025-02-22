@@ -36,7 +36,7 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
       ...product,
       quantity,
     });
-    toggleCart()
+    toggleCart();
   };
 
   return (
