@@ -17,7 +17,7 @@ export default async function RestaurantPage(props: RestaurantPagePrpps) {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center px-6 pt-24">
-      <div className="items-center-gap-2 flex flex-col">
+      <div className="flex flex-col items-center gap-2">
         <Image
           src={restaurant.avatarImageUrl}
           alt={restaurant.name}
