@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+import { Toaster } from "@/components/ui/sonner";
 import { Poppins } from "next/font/google";
 import { CartProvider } from "./[slug]/menu/contexts/cart";
 
@@ -22,6 +23,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.className}`}>
         <CartProvider>{children}</CartProvider>
+
+        <Toaster duration={7000} richColors />
       </body>
     </html>
   );
