@@ -15,7 +15,7 @@ export const RestaurantHeader = ({ restaurant }: RestaurantHeaderProps) => {
   const { slug } = useParams<{ slug: string }>();
 
   const handleBackClick = () => router.back();
-  const handleOrdersClick = () => router.push(`${slug}/orders`);
+  const handleOrdersClick = () => router.push(`/${slug}/orders`);
 
   return (
     <div className="relative h-[250px] w-full">
