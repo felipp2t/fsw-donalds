@@ -4,6 +4,7 @@ import { db } from '@/lib/prisma'
 import type { ConsumptionMethod } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { removeCpfPunctuation } from '../helpers/cpf'
+import { revalidatePath } from 'next/cache'
 
 interface createOrderProps {
   customerName: string
@@ -59,6 +60,7 @@ export const createOrder = async (input: createOrderProps) => {
       restaurantId: restaurant.id,
     },
   })
+  revalidatePath(`/${input.slug}/orders`)
 
   redirect(`/${input.slug}/orders?${removeCpfPunctuation(input.customerCpf)}`)
 }
