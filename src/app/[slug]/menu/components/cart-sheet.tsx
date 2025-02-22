@@ -8,7 +8,8 @@ import { CartProductItem } from "./cart-product-item";
 import { FinishOrderDialog } from "./finish-order-dialog";
 
 export const CartSheet = () => {
-  const { isOpen, toggleCart, products, total } = useContext(CartContext);
+  const { isOpen, toggleCart, products, total, totalQuantity } =
+    useContext(CartContext);
   const [finsishOrderDialogIsOpen, setFinsishOrderDialogIsOpen] =
     useState(false);
 
@@ -34,6 +35,7 @@ export const CartSheet = () => {
 
           <Button
             className="w-full rounded-full"
+            disabled={!totalQuantity}
             onClick={() => setFinsishOrderDialogIsOpen(true)}
           >
             Finalizar pedido
