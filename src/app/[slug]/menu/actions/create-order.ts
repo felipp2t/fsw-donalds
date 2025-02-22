@@ -60,5 +60,5 @@ export const createOrder = async (input: createOrderProps) => {
     },
   })
 
-  redirect(`/${input.slug}/orders`)
+  redirect(`/${input.slug}/orders?${removeCpfPunctuation(input.customerCpf)}`)
 }
