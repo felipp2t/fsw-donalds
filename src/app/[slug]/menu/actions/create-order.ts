@@ -62,7 +62,7 @@ export const createOrder = async (input: createOrderProps) => {
   })
   revalidatePath(`/${input.slug}/orders`)
 
-  redirect(
-    `/${input.slug}/orders?cpf=${removeCpfPunctuation(input.customerCpf)}`
-  )
+  return {
+    redirectUrl: `/${input.slug}/orders?cpf=${removeCpfPunctuation(input.customerCpf)}`,
+  }
 }

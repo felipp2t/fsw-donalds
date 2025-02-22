@@ -58,7 +58,7 @@ export const FinishOrderDialog = ({
   const [isPending, startTransiction] = useTransition();
 
   const { slug } = useParams<{ slug: string }>();
-  const { products } = useContext(CartContext);
+  const { products, cleanCart } = useContext(CartContext);
   const seachParams = useSearchParams();
 
   const form = useForm<FormSchema>({
@@ -77,7 +77,7 @@ export const FinishOrderDialog = ({
       ) as ConsumptionMethod;
 
       startTransiction(async () => {
-        await createOrder({
+        const { redirectUrl } = await createOrder({
           consumptionMethod,
           customerCpf: data.cpf,
           customerName: data.name,
@@ -85,8 +85,11 @@ export const FinishOrderDialog = ({
           slug,
         });
 
-        onOpenChange(false);
         toast.success("Pedido finalizado com sucesso!");
+        onOpenChange(false);
+        cleanCart();
+
+        window.location.href = redirectUrl;
       });
     } catch (error) {
       if (error instanceof Error) {
