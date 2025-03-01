@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,16 +34,23 @@ const getStatusLabel = (status: OrderStatus) => {
   if (status === "FINISHED") return "Finalizado";
   if (status === "IN_PREPARATION") return "Em preparo";
   if (status === "PENDING") return "Pendente";
+  if (status === "PAYMENT_CONFIRMED") return "Pagamento confirmado";
+  if (status === "PAYMENT_FAILED") return "Pagamento falhou";
   return "";
 };
 
 export const OrderList = ({ orders }: OrderListProps) => {
-  const router = useRouter()
-  const handleBackClick = () => router.back()
-  
+  const router = useRouter();
+  const handleBackClick = () => router.back();
+
   return (
     <div className="space-y-6 p-6">
-      <Button variant="secondary" size="icon" className="rounded-full" onClick={handleBackClick}>
+      <Button
+        variant="secondary"
+        size="icon"
+        className="rounded-full"
+        onClick={handleBackClick}
+      >
         <ChevronLeftIcon />
       </Button>
 
@@ -58,7 +65,9 @@ export const OrderList = ({ orders }: OrderListProps) => {
             <div
               className={cn(
                 "w-fit rounded-full px-2 py-1 text-xs font-semibold text-white",
-                order.status === OrderStatus.FINISHED
+                ([OrderStatus.FINISHED, OrderStatus.PAYMENT_CONFIRMED] as OrderStatus[]).includes(
+                  order.status
+                )
                   ? "bg-green-500 text-white"
                   : "bg-gray-200 text-gray-500",
               )}

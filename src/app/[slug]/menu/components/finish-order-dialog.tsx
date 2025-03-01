@@ -22,14 +22,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ConsumptionMethod } from "@prisma/client";
+import { loadStripe } from "@stripe/stripe-js";
 import { Loader2Icon } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
-import { useContext, useTransition } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { PatternFormat } from "react-number-format";
 import { toast } from "sonner";
 import { z } from "zod";
 import { createOrder } from "../actions/create-order";
+import { createStripeCheckout } from "../actions/create-stripe-checkout";
 import { CartContext } from "../contexts/cart";
 import { isValidCpf } from "../helpers/cpf";
 
@@ -55,7 +57,7 @@ export const FinishOrderDialog = ({
   open,
   onOpenChange,
 }: FinishOrderDialogProps) => {
-  const [isPending, startTransiction] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { slug } = useParams<{ slug: string }>();
   const { products, cleanCart } = useContext(CartContext);
@@ -72,29 +74,42 @@ export const FinishOrderDialog = ({
 
   const onSubmit = async (data: FormSchema) => {
     try {
+      setIsLoading(true);
       const consumptionMethod = seachParams.get(
         "consumptionMethod",
       ) as ConsumptionMethod;
 
-      startTransiction(async () => {
-        const { redirectUrl } = await createOrder({
-          consumptionMethod,
-          customerCpf: data.cpf,
-          customerName: data.name,
-          products,
-          slug,
-        });
-
-        toast.success("Pedido finalizado com sucesso!");
-        onOpenChange(false);
-        cleanCart();
-
-        window.location.href = redirectUrl;
+      const order = await createOrder({
+        consumptionMethod,
+        customerCpf: data.cpf,
+        customerName: data.name,
+        products,
+        slug,
       });
+      const { sessionId } = await createStripeCheckout({
+        products,
+        orderId: order.id,
+        consumptionMethod,
+        cpf: data.cpf,
+        slug,
+      });
+
+      if (!process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY) return;
+
+      const stripe = await loadStripe(
+        process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
+      );
+
+      stripe?.redirectToCheckout({
+        sessionId,
+      });
+      cleanCart();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -148,9 +163,9 @@ export const FinishOrderDialog = ({
                   type="submit"
                   variant="destructive"
                   className="rounded-full"
-                  disabled={isPending}
+                  disabled={isLoading}
                 >
-                  {isPending ? (
+                  {isLoading ? (
                     <Loader2Icon className="animate-spin" />
                   ) : (
                     "Finalizar"
